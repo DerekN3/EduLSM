@@ -143,8 +143,7 @@ class Exercise2Fragment : Fragment() {
                         if (transactionCompleted) {
                         LetterLearningScreen()
                         } else {
-//                            LoadingScreen()
-                            GlideCoil(R.drawable.n9)
+                            LoadingScreen()
                         }
                     }
                 }
@@ -161,6 +160,7 @@ class Exercise2Fragment : Fragment() {
             shape = RoundedCornerShape(16.dp)
         ) {
             Row {
+
                 when (cardData) {
                     is CardData.Letters -> {
                         Image(
@@ -170,20 +170,36 @@ class Exercise2Fragment : Fragment() {
                             painter = painterResource(id = cardData.data.image),
                             contentDescription = "the letter a in LSM"
                         )
+                        cardData.data.title to cardData.data.description
                     }
-                    is CardData.VideoGif -> TODO()
-                }
-                Column(
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = stringResource(id = cardData.data.title),
-                        modifier = Modifier.padding(bottom = 8.dp),
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(text = stringResource(id = cardData.data.description))
+                    is CardData.VideoGif -> {
+                        AsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(cardData.data.uri)
+                                .crossfade(true)
+                                .build(),
+                            contentDescription = "GIF Image",
+                            imageLoader = imageLoader(LocalContext.current),
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .size(150.dp)
+                        )
+                        cardData.data.title to cardData.data.description
+                    }
+                }.let { (title, description) ->
+
+                    Column(
+                        modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = stringResource(id = title),
+                            modifier = Modifier.padding(bottom = 8.dp),
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(text = stringResource(id = description))
+                    }
                 }
             }
         }
@@ -404,7 +420,7 @@ class Exercise2Fragment : Fragment() {
                                 Log.e("seguro_puntos", "$puntos")
 
                                 if (puntos >= 3) {
-                                    if (level < 6) {
+                                    if (level < 12) {
                                         puntos = 0
                                         level++
                                         levelState = level
@@ -870,9 +886,11 @@ class Exercise2Fragment : Fragment() {
                 .data(gifUrl)
                 .crossfade(true)
                 .build(),
-            contentDescription = null,
+            contentDescription = "GIF Image",
             imageLoader = imageLoader(LocalContext.current),
             modifier = modifier
+                .padding(16.dp)
+                .size(150.dp)
         )
     }
 
