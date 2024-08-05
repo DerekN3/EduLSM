@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -463,28 +464,39 @@ class Exercise2Fragment : Fragment() {
         gridSize: Int = 3, // 3x3 grid
         tileSize: Dp = 100.dp,
     ) {
-        val imageResource: Int
-        val title: String
-        when (cardData) {
-            is CardData.Letters -> {
-                imageResource = cardData.data.image
-                title = stringResource(id = cardData.data.title)
-            }
-            is CardData.VideoGif -> TODO()
+        val title = when (cardData) {
+            is CardData.Letters -> stringResource(id = cardData.data.title)
+            is CardData.VideoGif -> stringResource(id = cardData.data.title)
         }
 
-//        Log.e("funs_shuffle", "$imageResource")
-        //val context = LocalContext.current
-        val imageBitmap = remember(imageResource) {
-            BitmapFactory.decodeResource(context.resources, imageResource)
+        var bitmap by remember(cardData) { mutableStateOf<Bitmap?>(null) }
+        when (cardData) {
+            is CardData.Letters -> {
+                bitmap = BitmapFactory.decodeResource(context.resources, cardData.data.image)
+            }
+            is CardData.VideoGif -> {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(cardData.data.uri)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = "Image",
+                    imageLoader = imageLoader(LocalContext.current),
+                    onSuccess = { state ->
+                        bitmap = (state.result.drawable as BitmapDrawable).bitmap
+                    }
+                )
+            }
         }
-//         Log.e("funs_shuffle", "$imageBitmap")
+
+        val imageBitmap = remember(bitmap) { bitmap!! }
+
         val tileBitmaps = remember(imageBitmap) {
             divideBitmap(imageBitmap, gridSize)
         }
 
         val shuffledTiles = remember(tileBitmaps) {
-           tileBitmaps.dropLast(1).toMutableStateList()
+           tileBitmaps.dropLast(1).shuffled().toMutableStateList()
        }
 
         // Estado para la posición del espacio en blanco
@@ -557,17 +569,11 @@ class Exercise2Fragment : Fragment() {
                                 tileSize = tileSize,
                                 onMove = {
                                     val curt =  shuffledTiles.toMutableList()
-//                                    shuffledTiles.clear()
-//                                    shuffledTiles.addAll(curt)
-//                                    shuffledTiles = shuffledTiles.toMutableStateList()
-                                   // val currentTiles = shuffledTiles.shuffled().toMutableList()
                                     val tempTile = curt[index]
                                     curt[index] = curt[it]
                                     curt[it] = tempTile
                                     shuffledTiles.clear()
                                     shuffledTiles.addAll(curt)
-//                                    shuffledTiles = curt
-
                                          },
                                 index = index,
                                 emptyTilePosition = emptyTilePosition.value,
@@ -875,6 +881,30 @@ class Exercise2Fragment : Fragment() {
                 .size(150.dp)
         )
     }
+
+//    @Composable
+//    fun getImageBitMap(cardData: CardData): Bitmap? {
+//        var bitmap by remember(cardData) { mutableStateOf<Bitmap?>(null) }
+//        when (cardData) {
+//            is CardData.Letters -> {
+//                bitmap = BitmapFactory.decodeResource(context?.resources, cardData.data.image)
+//            }
+//            is CardData.VideoGif -> {
+//                AsyncImage(
+//                    model = ImageRequest.Builder(LocalContext.current)
+//                        .data(cardData.data.uri)
+//                        .crossfade(true)
+//                        .build(),
+//                    contentDescription = "Image",
+//                    imageLoader = imageLoader(LocalContext.current),
+//                    onSuccess = { state ->
+//                        bitmap = (state.result.drawable as BitmapDrawable).bitmap
+//                    }
+//                )
+//            }
+//        }
+//        return bitmap
+//    }
 
     @Preview(showBackground = true)
     @Composable
