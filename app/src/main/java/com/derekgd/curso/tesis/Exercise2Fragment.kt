@@ -160,34 +160,16 @@ class Exercise2Fragment : Fragment() {
             shape = RoundedCornerShape(16.dp)
         ) {
             Row {
-
                 when (cardData) {
                     is CardData.Letters -> {
-                        Image(
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .size(150.dp),
-                            painter = painterResource(id = cardData.data.image),
-                            contentDescription = "the letter a in LSM"
-                        )
+                        CubeImage(cardData.data.image)
                         cardData.data.title to cardData.data.description
                     }
                     is CardData.VideoGif -> {
-                        AsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(cardData.data.uri)
-                                .crossfade(true)
-                                .build(),
-                            contentDescription = "GIF Image",
-                            imageLoader = imageLoader(LocalContext.current),
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .size(150.dp)
-                        )
+                        CubeGif(cardData.data.uri)
                         cardData.data.title to cardData.data.description
                     }
                 }.let { (title, description) ->
-
                     Column(
                         modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -207,7 +189,7 @@ class Exercise2Fragment : Fragment() {
 
     @SuppressLint("UnrememberedMutableState")
     @Composable
-    fun LetterQuiz(image: Int, radioOptions: List<String>, onOptionSelected: (String) -> Unit) {
+    fun LetterQuiz(cardData: CardData, radioOptions: List<String>, onOptionSelected: (String) -> Unit) {
         var selectedIndex by mutableStateOf<Int?>(null)
         Card(
             modifier = Modifier
@@ -215,13 +197,10 @@ class Exercise2Fragment : Fragment() {
                 .fillMaxWidth(), shape = RoundedCornerShape(16.dp)
         ) {
             Row {
-                Image(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .size(150.dp),
-                    painter = painterResource(id = image),
-                    contentDescription = "the letter a in LSM"
-                )
+                when (cardData) {
+                    is CardData.Letters -> CubeImage(cardData.data.image)
+                    is CardData.VideoGif -> CubeGif(cardData.data.uri)
+                }
                 Column(
                     Modifier
                         .padding(16.dp)
@@ -336,21 +315,13 @@ class Exercise2Fragment : Fragment() {
                 }
 
                 shuffledCards.forEachIndexed { index, lettersCards ->
-                    val lettersCardsAnswer:String
-                    var lettersCardsImage:Int = 0
-                    when (lettersCards) {
-                        is CardData.Letters -> {
-                            lettersCardsAnswer = lettersCards.data.answer
-                            lettersCardsImage = lettersCards.data.image
-                        }
-                        is CardData.VideoGif -> {
-                            lettersCardsAnswer = lettersCards.data.answer
-                           // lettersCardsImage = lettersCards.data.uri
-                        }
+                    val lettersCardsAnswer= when (lettersCards) {
+                        is CardData.Letters -> lettersCards.data.answer
+                        is CardData.VideoGif -> lettersCards.data.answer
                     }
                     answers.add(lettersCardsAnswer)
                     LetterQuiz(
-                        lettersCardsImage,
+                        lettersCards,
                         shuffleLettersList[index],
                         onOptionSelected = { selectedAnswer ->
                             selectedOptions[index] =
@@ -880,15 +851,26 @@ class Exercise2Fragment : Fragment() {
     }
 
     @Composable
-    fun GlideCoil(gifUrl: Int, modifier: Modifier = Modifier){
+    fun CubeImage(image: Int) {
+        Image(
+            modifier = Modifier
+                .padding(16.dp)
+                .size(150.dp),
+            painter = painterResource(id = image),
+            contentDescription = "A sign in LSM"
+        )
+    }
+
+    @Composable
+    fun CubeGif(uri: String){
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(gifUrl)
+                .data(uri)
                 .crossfade(true)
                 .build(),
             contentDescription = "GIF Image",
             imageLoader = imageLoader(LocalContext.current),
-            modifier = modifier
+            modifier = Modifier
                 .padding(16.dp)
                 .size(150.dp)
         )
