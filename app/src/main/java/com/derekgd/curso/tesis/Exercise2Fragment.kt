@@ -234,7 +234,7 @@ class Exercise2Fragment : Fragment() {
         val lettersCards = remember {
             mutableStateListOf(*levelsList[levelState].cards.toTypedArray())
         }
-        val shuffledCards by remember {
+        val shuffledCards by remember(lettersCards) {
             mutableStateOf(lettersCards.shuffled())
         }
         val titlesNumber = if (levelState < 6) 0 else if (levelState < 9) 1 else 2
@@ -243,6 +243,7 @@ class Exercise2Fragment : Fragment() {
         val sectionDescription = SectionDescription[titlesNumber]
         val selectedOptions = mutableListOf("", "", "")
         val answers: MutableList<String> = mutableListOf()
+        var YesNoAnswer: String = ""
         val intentos = remember { mutableIntStateOf(3) }
         var showImages by remember { mutableStateOf(true) }
         var seguro by remember { mutableStateOf(true) }
@@ -283,176 +284,180 @@ class Exercise2Fragment : Fragment() {
                 lettersCards.forEach { cardData ->
                     LetterIntroduction(cardData)
                 }
-                Button(
-                    onClick = {
-                        if (seguro) {
-                            showImages = !showImages
-                            seguro = false
-                            Log.e("seguro", "$seguro")
-                            coroutineScope.launch {
-                                scrollState.scrollTo(0)
-                            }
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                ) {
-                    Text(text = "Hacer el ejercicio")
-                }
-
-                val shuffleLettersList by remember {
-                    derivedStateOf {
-                        shuffledCards.map { cardData ->
-                            val answer = when (cardData) {
-                                is CardData.Letters -> cardData.data.answer
-                                is CardData.VideoGif -> cardData.data.answer
-                            }
-                            val shuffleLetters = elements[titlesNumber].shuffled().take(2).toMutableList()
-                            shuffleLetters.add(answer)
-                            shuffleLetters.shuffled()
-                        }
-                    }
-                }
-
-                shuffledCards.forEachIndexed { index, lettersCards ->
-                    val lettersCardsAnswer= when (lettersCards) {
-                        is CardData.Letters -> lettersCards.data.answer
-                        is CardData.VideoGif -> lettersCards.data.answer
-                    }
-                    answers.add(lettersCardsAnswer)
-                    LetterQuiz(
-                        lettersCards,
-                        shuffleLettersList[index],
-                        onOptionSelected = { selectedAnswer ->
-                            selectedOptions[index] =
-                                selectedAnswer // Guardar la selección del usuario
-                        })
-                }
-
-
-                var letRandom = remember(lettersCards) { lettersCards.random() }
-                SlidingPuzzle(letRandom)
-
-
-                val currentCard: CardData by remember { derivedStateOf { shuffledCards.first()} }
-                val title = remember(currentCard) {
-                    when (val card = currentCard) {
-                        is CardData.Letters -> card.data.title
-                        is CardData.VideoGif -> card.data.title
-                    }
-                }
-                val description = remember(currentCard) {
-                    when (val card = currentCard) {
-                        is CardData.Letters -> card.data.description
-                        is CardData.VideoGif -> card.data.description
-                    }
-                }
-                val randomDescription = remember(lettersCards) {
-                    when (val letters = lettersCards.random()) {
-                        is CardData.Letters -> letters.data.description
-                        is CardData.VideoGif -> letters.data.description
-                    }
-                }
-                val randomDecision by remember {
-                    derivedStateOf {
-                        listOf(
-                            description,
-                            randomDescription
-                        ).random()
-                    }
-                }
-                QuestionYesNo(
-                    stringResource(id = title),
-                    stringResource(id = randomDecision),
-                    stringResource(id = description)
-                )
-
-                //shuffleLetterCards = lettersCards.shuffled()
-                //shuffleLetters = lettersCards.shuffled()
-
-
-                Button(
-                    onClick = {
+            }
+            Button(
+                onClick = {
+                    if (seguro) {
+                        showImages = !showImages
+                        seguro = false
                         Log.e("seguro", "$seguro")
-                        if (!seguro) {
-                            //Log.e("seguro_seleccionadas", "$selectedOptions")
-                            //Log.e("seguro_respuestas", "$answers")
+                        coroutineScope.launch {
+                            scrollState.scrollTo(0)
+                        }
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                Text(text = "Hacer el ejercicio")
+            }
+
+            val shuffleLettersList by remember {
+                derivedStateOf {
+                    shuffledCards.map { cardData ->
+                        val answer = when (cardData) {
+                            is CardData.Letters -> cardData.data.answer
+                            is CardData.VideoGif -> cardData.data.answer
+                        }
+                        val shuffleLetters =
+                            elements[titlesNumber].shuffled().take(2).toMutableList()
+                        shuffleLetters.add(answer)
+                        shuffleLetters.shuffled()
+                    }
+                }
+            }
+
+            shuffledCards.forEachIndexed { index, lettersCards ->
+                val lettersCardsAnswer = when (lettersCards) {
+                    is CardData.Letters -> lettersCards.data.answer
+                    is CardData.VideoGif -> lettersCards.data.answer
+                }
+                answers.add(lettersCardsAnswer)
+                LetterQuiz(
+                    lettersCards,
+                    shuffleLettersList[index],
+                    onOptionSelected = { selectedAnswer ->
+                        selectedOptions[index] =
+                            selectedAnswer // Guardar la selección del usuario
+                    })
+            }
 
 
-                            if (intentos.intValue > 0) {
+            var letRandom = remember(lettersCards) { lettersCards.random() }
+            SlidingPuzzle(letRandom)
 
-                                puntos += answers.zip(selectedOptions) { answer, selectedOption ->
-                                    if (answer == selectedOption) {
-                                        1
-                                    } else {
-                                        0
+
+            val currentCard: CardData by remember { derivedStateOf { shuffledCards.first() } }
+            val title = remember(currentCard) {
+                when (val card = currentCard) {
+                    is CardData.Letters -> card.data.title
+                    is CardData.VideoGif -> card.data.title
+                }
+            }
+            val description = remember(currentCard) {
+                when (val card = currentCard) {
+                    is CardData.Letters -> card.data.description
+                    is CardData.VideoGif -> card.data.description
+                }
+            }
+            val randomDescription = remember(lettersCards) {
+                when (val letters = lettersCards.random()) {
+                    is CardData.Letters -> letters.data.description
+                    is CardData.VideoGif -> letters.data.description
+                }
+            }
+            val randomDecision by remember {
+                derivedStateOf {
+                    listOf(
+                        description,
+                        randomDescription
+                    ).random()
+                }
+            }
+            QuestionYesNo(
+                stringResource(id = title),
+                stringResource(id = randomDecision),
+                onOptionSelected = { selectedAnswer ->
+                    YesNoAnswer = selectedAnswer
+                }
+            )
+            //shuffleLetterCards = lettersCards.shuffled()
+            //shuffleLetters = lettersCards.shuffled()
+
+
+            Button(
+                onClick = {
+                    Log.e("seguro", "$seguro")
+                    if (!seguro) {
+                        //Log.e("seguro_seleccionadas", "$selectedOptions")
+                        //Log.e("seguro_respuestas", "$answers")
+
+
+                        if (intentos.intValue > 0) {
+
+                            puntos += answers.zip(selectedOptions) { answer, selectedOption ->
+                                if (answer == selectedOption) {
+                                    1
+                                } else {
+                                    0
+                                }
+                            }.sum()
+                            if (description == randomDecision && YesNoAnswer == "Si") {
+                                puntos++
+                            } else if (description != randomDecision && YesNoAnswer == "No") {
+                                puntos++
+                            }
+                            Log.e("seguro_puntos", "$puntos")
+                            if (puntos >= 3) {
+                                if (level < 12) {
+                                    puntos = 0
+                                    level++
+                                    levelState = level
+                                    levelRef.setValue(level)
+                                    showImages = true
+                                    seguro = true
+                                    lettersCards.clear()
+                                    levelsList[levelState].cards.forEach {
+                                        lettersCards.add(it)
                                     }
-                                }.sum()
-                                Log.e("seguro_puntos", "$puntos")
-
-                                if (puntos >= 3) {
-                                    if (level < 12) {
-                                        puntos = 0
-                                        level++
-                                        levelState = level
-                                        levelRef.setValue(level)
-                                        showImages = true
-                                        seguro = true
-                                        lettersCards.clear()
-//                                        levelsList[levelState].lettersCards.forEach {
-//                                            lettersCards.add(it)
-//                                        }
-//                                        shuffledCards = lettersCards.shuffled()
-//                                        shuffleLetters = lettersCards.shuffled()
-                                        letRandom = lettersCards.random()
-                                        coroutineScope.launch {
-                                            scrollState.scrollTo(0)
-                                        }
-                                    } else {
-                                        Toast.makeText(
-                                            context,
-                                            "Felicidades a completado todos los niveles disponibles!",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                    letRandom = lettersCards.random()
+                                    coroutineScope.launch {
+                                        scrollState.scrollTo(0)
                                     }
                                 } else {
                                     Toast.makeText(
                                         context,
-                                        "Lo siento pero no paso el examen intentelo mas tarde le quedan ${intentos.intValue - 1} intentos",
+                                        "Felicidades a completado todos los niveles disponibles!",
                                         Toast.LENGTH_SHORT
                                     ).show()
-                                    intentos.intValue--
                                 }
-
                             } else {
-                                val intent = Intent(requireView().context, MainActivity::class.java)
-                                startActivity(intent)
-                                activity?.finish()
                                 Toast.makeText(
                                     context,
-                                    "Fue un buen examen estudia mas y lo conseguiras",
+                                    "Lo siento pero no paso el examen intentelo mas tarde le quedan ${intentos.intValue - 1} intentos",
                                     Toast.LENGTH_SHORT
                                 ).show()
+                                intentos.intValue--
                             }
 
-                            //Log.e("seguro_puntos", "$puntos")
-                            //Log.e("seguro_intentos", "$intentos")
-
                         } else {
+                            val intent = Intent(requireView().context, MainActivity::class.java)
+                            startActivity(intent)
+                            activity?.finish()
                             Toast.makeText(
                                 context,
-                                "Lo siento no puede mandar las respuestas antes de iniciar el examen",
+                                "Fue un buen examen estudia mas y lo conseguiras",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                ) {
-                    Text(text = "Comprobar resultados")
-                }
+
+                        //Log.e("seguro_puntos", "$puntos")
+                        //Log.e("seguro_intentos", "$intentos")
+
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Lo siento no puede mandar las respuestas antes de iniciar el examen",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                Text(text = "Comprobar resultados")
             }
         }
     }
@@ -686,14 +691,11 @@ class Exercise2Fragment : Fragment() {
 
     }
 
+    @SuppressLint("UnrememberedMutableState")
     @Composable
-    fun QuestionYesNo(title: String, description: String, answer: String) {
+    fun QuestionYesNo(title: String, description: String, onOptionSelected: (String) -> Unit) {
         val radioOptions = listOf("Si", "No")
-        var optionSelected by remember { mutableStateOf<String?>(null)}
-        var onChecked by remember { mutableStateOf(false) }
-        val respuesta  = if(description == answer) "Si" else "No"
-        val coroutineScope = rememberCoroutineScope()
-        var debounceJob : Job? = null
+        var optionSelected by mutableStateOf<String?>(null)
 
         Card(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -719,15 +721,7 @@ class Exercise2Fragment : Fragment() {
                             selected = (text == optionSelected),
                             onClick = {
                                 optionSelected = text
-                                debounceJob?.cancel()
-                                debounceJob = coroutineScope.launch {
-                                    delay(500)
-                                    if (text == respuesta && !onChecked) {
-                                        puntos++
-                                        onChecked = true
-                                    }
-                                    Log.e("seguro_puntos", "$puntos")
-                                }
+                                onOptionSelected(text)
                             },
                         )
                         Text(
