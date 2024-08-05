@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".tesis.VideosFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/level1Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:text="Nivel 1"
+            android:textSize="@dimen/title_size_large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/level1SubTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Las primeras letras"
+            android:textSize="@dimen/subtitle_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/level1Title" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            app:cardCornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/level1SubTitle"
+            tools:cardBackgroundColor="@color/black">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/aImage"
+                    android:layout_width="200dp"
+                    android:layout_height="150dp"
+                    android:layout_margin="20dp"
+                    android:src="@drawable/a"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/titleA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Letra A"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/aImage"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:textColor="@color/white" />
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:text="La primera letra del alfabeto es el simbolo mas facil para esto simplemente cerramos la mano como un puño"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/aImage"
+                    app:layout_constraintTop_toBottomOf="@+id/titleA"
+                    tools:textColor="@color/white" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            app:cardCornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card1"
+            tools:cardBackgroundColor="@color/black">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/bImage"
+                    android:layout_width="200dp"
+                    android:layout_height="150dp"
+                    android:layout_margin="20dp"
+                    android:src="@drawable/b"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/titleB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Letra B"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/bImage"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:textColor="@color/white" />
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:text="Para la letra b tenemos que estirar los dedos de la mano excepto por el pulgar y mantener la mano recta"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/bImage"
+                    app:layout_constraintTop_toBottomOf="@+id/titleB"
+                    tools:textColor="@color/white" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            app:cardCornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card2"
+            tools:cardBackgroundColor="@color/black">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/CImage"
+                    android:layout_width="200dp"
+                    android:layout_height="150dp"
+                    android:layout_margin="20dp"
+                    android:src="@drawable/c"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/titleC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Letra C"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/CImage"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:textColor="@color/white" />
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:text="Esta letra es muy sencilla de recordar simplemente formar una c con los dedos de la mano"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/CImage"
+                    app:layout_constraintTop_toBottomOf="@+id/titleC"
+                    tools:textColor="@color/white" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <Button
+            android:id="@+id/continues"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="Hacer el ejercicio"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card3" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/exercise1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            app:cardCornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/continues"
+            tools:cardBackgroundColor="@color/black">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/ex1"
+                    android:layout_width="200dp"
+                    android:layout_height="150dp"
+                    android:layout_margin="20dp"
+                    android:src="@drawable/a"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:visibility="invisible"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <RadioGroup
+                    android:id="@+id/rg1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ex1"
+                    app:layout_constraintTop_toTopOf="parent" >
+
+                    <RadioButton
+                        android:id="@+id/radio11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="A"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ex1"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <RadioButton
+                        android:id="@+id/radio12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="E"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ex1"
+                        app:layout_constraintTop_toBottomOf="@+id/radio11" />
+
+                    <RadioButton
+                        android:id="@+id/radio13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="G"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ex1"
+                        app:layout_constraintTop_toBottomOf="@+id/radio12" />
+                </RadioGroup>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/exercise2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            app:cardCornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exercise1"
+            tools:cardBackgroundColor="@color/black">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/ex2"
+                    android:layout_width="200dp"
+                    android:layout_height="150dp"
+                    android:layout_margin="20dp"
+                    android:visibility="invisible"
+                    android:src="@drawable/b"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <RadioGroup
+                    android:id="@+id/rg2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ex2"
+                    app:layout_constraintTop_toTopOf="parent" >
+
+                    <RadioButton
+                        android:id="@+id/radio21"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="B"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ex2"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <RadioButton
+                        android:id="@+id/radio22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="H"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ex1"
+                        app:layout_constraintTop_toBottomOf="@+id/radio21" />
+
+                    <RadioButton
+                        android:id="@+id/radio23"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="G"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ex1"
+                        app:layout_constraintTop_toBottomOf="@+id/radio22" />
+                </RadioGroup>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/exercise3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            app:cardCornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exercise2"
+            tools:cardBackgroundColor="@color/black">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/ex3"
+                    android:layout_width="200dp"
+                    android:layout_height="150dp"
+                    android:layout_margin="20dp"
+                    android:visibility="invisible"
+                    android:src="@drawable/d"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <RadioGroup
+                    android:id="@+id/rg3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ex3"
+                    app:layout_constraintTop_toTopOf="parent" >
+
+                    <RadioButton
+                        android:id="@+id/radio31"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="D"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ex3"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <RadioButton
+                        android:id="@+id/radio32"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="T"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ex1"
+                        app:layout_constraintTop_toBottomOf="@+id/radio31" />
+
+                    <RadioButton
+                        android:id="@+id/radio33"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ninguna"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ex1"
+                        app:layout_constraintTop_toBottomOf="@+id/radio32" />
+                </RadioGroup>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/exercise4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            app:cardCornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exercise3"
+            tools:cardBackgroundColor="@color/black">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/ex4"
+                    android:layout_width="200dp"
+                    android:layout_height="150dp"
+                    android:layout_margin="20dp"
+                    android:visibility="invisible"
+                    android:src="@drawable/c"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <RadioGroup
+                    android:id="@+id/rg4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ex4"
+                    app:layout_constraintTop_toTopOf="parent" >
+
+                    <RadioButton
+                        android:id="@+id/radio41"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="M"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ex4"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <RadioButton
+                        android:id="@+id/radio42"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="C"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ex1"
+                        app:layout_constraintTop_toBottomOf="@+id/radio41" />
+
+                    <RadioButton
+                        android:id="@+id/radio43"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="P"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ex1"
+                        app:layout_constraintTop_toBottomOf="@+id/radio42" />
+                </RadioGroup>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/exercise5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            app:cardCornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exercise4"
+            tools:cardBackgroundColor="@color/black">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/ex5"
+                    android:layout_width="200dp"
+                    android:layout_height="150dp"
+                    android:layout_margin="20dp"
+                    android:visibility="invisible"
+                    android:src="@drawable/u"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <RadioGroup
+                    android:id="@+id/rg5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ex5"
+                    app:layout_constraintTop_toTopOf="parent" >
+
+                    <RadioButton
+                        android:id="@+id/radio51"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Ninguna"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ex5"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <RadioButton
+                        android:id="@+id/radio52"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Y"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ex5"
+                        app:layout_constraintTop_toBottomOf="@+id/radio51" />
+
+                    <RadioButton
+                        android:id="@+id/radio53"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="H"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ex5"
+                        app:layout_constraintTop_toBottomOf="@+id/radio15" />
+                </RadioGroup>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="Comprobar Resultados"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exercise5" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

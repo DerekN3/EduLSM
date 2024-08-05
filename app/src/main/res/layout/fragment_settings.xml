@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="20dp"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".tesis.SettingsFragment">
+
+
+    <TextView
+        android:id="@+id/tvFragmentTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tema"
+        android:textSize="@dimen/title_size_medium"
+
+
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginVertical="20dp"
+       >
+
+        <TextView
+            android:id="@+id/tvThemeTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tema"
+            android:textSize="@dimen/text_size_large"
+            android:layout_marginEnd="20dp"
+
+            />
+
+        <TextView
+            android:id="@+id/tvTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Predeterminado"
+            android:textSize="@dimen/text_size_large"
+            android:layout_marginStart="20dp"
+            android:textColor="@color/violent"
+            />
+
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tvSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tamaño de letra"
+        android:textSize="@dimen/title_size_medium"
+        android:textStyle="bold"/>
+
+    <com.google.android.material.slider.RangeSlider
+        android:id="@+id/rangeSliderTextSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:stepSize="1"
+        android:valueFrom="10"
+        android:valueTo="40"
+        />
+
+</LinearLayout>

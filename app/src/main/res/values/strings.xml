@@ -1,0 +1,130 @@
+<resources>
+    <string name="project_title">eduLSM</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="whatsLSM1">
+        "La Lengua de Señas Mexicana (LSM), es la lengua que utilizan las personas sordas en México. Como toda lengua, posee su propia sintaxis, gramática y léxico."
+    </string>
+    <string name="learning">Lo que se aprendera</string>
+    <string name="contentCurse">
+        "• Aprender la lengua de señas mexicana. \n\n"
+        "•Comunicarte con la comunidad Sorda de México \n\n"
+        "•Respetar y promover los derechos de las personas con discapacidad auditiva."
+
+    </string>
+    <string name="Elements">Este curso incluye: Multiples videos e imagenes para ayudar a la compresion del tema al final de cada uno de los niveles se tendra que completar un cuestionario que evaluara tus capacidades sobre lo aprendido si completas con exito el cuestionario podras avanzar hacia la siguiente seccion  !A aprender!</string>
+    <string name="videoText">Empezemos viendo este video para desbloquear el primer nivel </string>
+
+    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+    <string name="facebook_application_id" translatable="false">778120010993132</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">778120010993132</string>
+    <string name="default_web_client_id" translatable="false">  534362905620-3mr81ge529qmo38n7lfh9viu5stgu9lc.apps.googleusercontent.com </string>
+
+    <!-- Letras titulos y descripciones -->
+    <string name="title_a">Letra A</string>
+    <string name="description_a">La primera letra del alfabeto es el simbolo mas facil para esto simplemente cerramos la mano como un puño </string>"
+    <string name="title_b">Letra B</string>
+    <string name="description_b">Para la letra b tenemos que estirar los dedos de la mano excepto por el pulgar y mantener la mano recta </string>"
+    <string name="title_c">Letra C</string>
+    <string name="description_c">Esta letra es muy sencilla de recordar simplemente formar una c con los dedos de la mano</string>"
+    <string name="title_d">Letra D</string>
+    <string name="description_d">Extiende tu dedo índice completamente mientras que los demás dedos permanecen cerrados . </string>"
+    <string name="title_e">Letra E</string>
+    <string name="description_e"> Para formar la letra E, junta en puño tus manteniendo el pulgar doblado hacia la palma. </string>"
+    <string name="title_f">Letra F</string>
+    <string name="description_f">  Dobla tu dedo índice tocando la punta con la punta del pulgar formando un círculo,los demás dedos permanecen extendidos.</string>"
+    <string name="title_g">Letra G</string>
+    <string name="description_g"> Extiende tu dedo índice y apunta hacia arriba con el pulgar como si quisieras simular una arma</string>"
+    <string name="title_h">Letra H</string>
+    <string name="description_h"> Cierra tu mano simulando una arma y extendiendo el dedo índice y el dedo medio.</string>"
+    <string name="title_i">Letra I</string>
+    <string name="description_i"> Para la letra I, extiende el dedo meñique manteniendo los demás dedos cerrados.</string>"
+    <string name="title_j">Letra J</string>
+    <string name="description_j">  Extiende el dedo meñique manteniendo los demás dedos cerrados y as un movimiento hacia arriba y abajo. </string>"
+    <string name="title_k">Letra K</string>
+    <string name="description_k"> Para la K, extiende los dedos índice (que moveras hacia abajo) y medio, metiendo el pulgar entre los dos.</string>"
+    <string name="title_l">Letra L</string>
+    <string name="description_l"> Extiende tu pulgar y tu dedo índice formando una L. El resto de los dedos deben estar cerrados en un puño. </string>"
+    <string name="title_m">Letra M</string>
+    <string name="description_m"> Extiende tus dedos anular,índice y medio manteniéndolos juntos con la palma boca abajo los demas dedos atras </string>"
+    <string name="title_n">Letra N</string>
+    <string name="description_n"> Con la palma boca abajo extiende tus dedos índice y medio manteniéndolos juntos, los demas dedos doblados </string>"
+    <string name="title_ñ">Letra Ñ</string>
+    <string name="description_ñ"> Estira tus dedos índice y medio  con la palma boca abajo mientras realizas un movimiento pendular con la muñeca  </string>"
+    <string name="title_o">Letra O</string>
+    <string name="description_o"> Forma un círculo con tu dedo índice y el pulgar, manteniendo los demás dedos ligeramente doblados hacia la palma. </string>"
+    <string name="title_p">Letra P</string>
+    <string name="description_p"> Realiza el simbolo de paz pero colocando el pulgar entre medio de los otros dedos. </string>"
+    <string name="title_q">Letra Q</string>
+    <string name="description_q"> Forma la letra Q formando una pinza con los dedospulgar y indice y moviendolos hacia arriba. </string>"
+    <string name="title_r">Letra R</string>
+    <string name="description_r"> Cruza tu dedo índice debajo de tu dedo medio extendido. Los demás dedos permanecen cerrados. </string>"
+    <string name="title_s">Letra S</string>
+    <string name="description_s"> Cierra la mano como si fueras a dar un puñetazo. </string>"
+    <string name="title_t">Letra T</string>
+    <string name="description_t"> Cierra la mano como si fueras a dar un puñetazo, pero metiendo el pulgar entre el dedo indice y el medio. </string>"
+    <string name="title_u">Letra U</string>
+    <string name="description_u"> Levanta únicamente tu dedo índice y dedo medio, asegurándote de mantenerlos juntos y rectos. </string>"
+    <string name="title_v">Letra V</string>
+    <string name="description_v"> Extiende tu dedo índice y dedo medio separándolos ligeramente, similar al símbolo de la paz. </string>"
+    <string name="title_w">Letra W</string>
+    <string name="description_w"> Extiende tus dedos índice, medio y anular, separándolos ligeramente. El meñique permanece doblado. </string>"
+    <string name="title_x">Letra X</string>
+    <string name="description_x"> Coloca tus  dedos en puño con el pulgar en medio, el indice como una garra y muevelo haci atras y delante. </string>"
+    <string name="title_y">Letra Y</string>
+    <string name="description_y"> Extiende tu pulgar y tu meñique, manteniendo los demás dedos doblados hacia la palma. </string>"
+    <string name="title_z">Letra Z</string>
+    <string name="description_z"> Extiende tu dedo índice apuntando hacia arriba simulando dibujar una z. Mantén los demás dedos cerrados en un puño.</string>"
+
+    <string name="number_1">Numero 1</string>
+    <string name="description_number_1"> Extiende tu dedo índice apuntando hacia arriba mientras escondes todos los demas dedos.</string>"
+    <string name="number_2">Numero 2</string>
+    <string name="description_number_2"> Realiza el simbolo de amor y paz con el dedo indice y el medio con la palma hacia ti.</string>"
+    <string name="number_3">Numero 3</string>
+    <string name="description_number_3"> Esconde el pulgar y levanta todos los demas dedos excepto el meñique con la palma hacia ti.</string>"
+    <string name="number_4">Numero 4</string>
+    <string name="description_number_4"> Esconde el pulgar y levanta todos los demas dedos dejando una separacion entre ellos.</string>"
+    <string name="number_5">Numero 5</string>
+    <string name="description_number_5"> Muestra la mano levantando todos los dedos visiblemente separados.</string>"
+    <string name="number_6">Numero 6</string>
+    <string name="description_number_6"> Realiza la figura como si dieran un pulgar arriba(like).</string>"
+    <string name="number_7">Numero 7</string>
+    <string name="description_number_7"> Coloca el indice y el pulgar con un angulo de 90° apuntandando el indice ligeramente hacia arriba.</string>"
+    <string name="number_8">Numero 8</string>
+    <string name="description_number_8"> Levanta el pulgar y forma una V con los dedos indice y medio.</string>"
+    <string name="number_9">Numero 9</string>
+    <string name="description_number_9"> Con la palma hacia afuera estira todos los dedos menos el pulgar y muevelos arriba y abajo a la vez.</string>"
+    <string name="number_10">Numero 10</string>
+    <string name="description_number_10"> Con todos los dedos estirados y la palma hacia afuera, gira la mano hasta mostrar el dorso de la mano y regresa.</string>"
+
+    <string name="color_white">Color Blanco</string>
+    <string name="description_color_white"> Estira los dedos de ambas manos y el pulgar atras, pon una con la palma hacia abajo y la otra con el dorso apuntando hacia los dedos sobre la muñeca y deslizala hasta pasar los dedos y repite.</string>"
+    <string name="color_black">Color negro</string>
+    <string name="description_color_black"> Estira los dedos de una mano con una palma hacia arriba y sobre ella desliza los dedos indice y medi estirados desde el medio hasta la punta de los dedos.</string>"
+    <string name="color_blue">Color azul</string>
+    <string name="description_color_blue"> Pon una mano con la palma hacia arriba y todos los dedos estirados y la otra mano formando un puño con el pulgar hacia arriba  .</string>"
+    <string name="color_yellow">Color amarillo</string>
+    <string name="description_color_yellow"> Forma un puño con ambas manos la primera ira con el dorso hacia arriba y la segunda con el dorso hacia abajo y pulgar estirado.</string>"
+    <string name="color_gray">Color gris</string>
+    <string name="description_color_gray"> Coloca una mano con la palma hacia arriba y todos los dedos estirados y la otra mano formando una L con el pulgar y el indice y los demas dedos recogidos y as circulos sobre la otra mano .</string>"
+    <string name="color_purple">Color morado</string>
+    <string name="description_color_purple"> Estira todos los dedos y o oculta el pulgar de una mano y colocala del lado con la palma hacia ti, la otra mano con los dedos indice pulgar y medio apuntando hacia abajo sobre el borde de la primera hasta la los dedos y repite.</string>"
+    <string name="color_green">Color verde</string>
+    <string name="description_color_green"> Estira todos los dedos de una mano con la palma hacia arriba y con la otra forma una v con los dedos indice y medio  y deslizalos del centro de la mano hacia los dedos y de regreso varias veses.</string>"
+    <string name="color_pink">Color rosa</string>
+    <string name="description_color_pink"> Con una mano con la palma hacia arriba realiza movimientos pendulares con la otra estirando los dedos medio e indice simulando embarrar algo.</string>"
+
+
+
+
+    <string name="InstructionsSlidingPuzzle"> Resuelve el rompecabezas en el menor tiempo posible! Puedes mover las piezas utilizando el espacio vacio como comodin y distribuyendolo correctamente y tambien intercambiar piezas adyacentes si lo necesitas, buena suerte!    </string>
+
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="title_activity_video_fullscreen">VideoFullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+</resources>
