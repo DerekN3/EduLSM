@@ -37,6 +37,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -75,17 +77,19 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import coil.Coil
 import coil.ImageLoader
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
-import com.derekgd.curso.R
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class Exercise2Fragment : Fragment() {
@@ -143,6 +147,7 @@ class Exercise2Fragment : Fragment() {
                     Surface {
                         if (transactionCompleted) {
                         LetterLearningScreen()
+//                            TestSlidingPuzzle()
                         } else {
                             LoadingScreen()
                         }
@@ -290,7 +295,7 @@ class Exercise2Fragment : Fragment() {
                     if (seguro) {
                         showImages = !showImages
                         seguro = false
-                        Log.e("seguro", "$seguro")
+//                        Log.e("seguro", "$seguro")
                         coroutineScope.launch {
                             scrollState.scrollTo(0)
                         }
@@ -334,8 +339,8 @@ class Exercise2Fragment : Fragment() {
             }
 
 
-            var letRandom = remember(lettersCards) { lettersCards.random() }
-            SlidingPuzzle(letRandom)
+            val letRandom: CardData by remember { derivedStateOf {lettersCards.random()} }
+            SlidingPuzzle(letRandom.title,letRandom)
 
 
             val currentCard: CardData by remember { derivedStateOf { shuffledCards.first() } }
@@ -400,7 +405,7 @@ class Exercise2Fragment : Fragment() {
                             }
                             Log.e("seguro_puntos", "$puntos")
                             if (puntos >= 3) {
-                                if (level < 12) {
+                                if (level < 6) {
                                     puntos = 0
                                     level++
                                     levelState = level
@@ -411,7 +416,7 @@ class Exercise2Fragment : Fragment() {
                                     levelsList[levelState].cards.forEach {
                                         lettersCards.add(it)
                                     }
-                                    letRandom = lettersCards.random()
+//                                    letRandom = lettersCards.random()
                                     coroutineScope.launch {
                                         scrollState.scrollTo(0)
                                     }
@@ -464,17 +469,14 @@ class Exercise2Fragment : Fragment() {
 
     @Composable
     fun SlidingPuzzle(
+        title: Int,
         cardData: CardData,
         context: Context = LocalContext.current,
         gridSize: Int = 3, // 3x3 grid
         tileSize: Dp = 100.dp,
     ) {
-        val title = when (cardData) {
-            is CardData.Letters -> stringResource(id = cardData.data.title)
-            is CardData.VideoGif -> stringResource(id = cardData.data.title)
-        }
-
-        var bitmap by remember(cardData) { mutableStateOf<Bitmap?>(null) }
+        var seguro by remember(title) { mutableStateOf(true) }
+        var bitmap by remember(title) { mutableStateOf<Bitmap?>(null) }
         when (cardData) {
             is CardData.Letters -> {
                 bitmap = BitmapFactory.decodeResource(context.resources, cardData.data.image)
@@ -493,52 +495,43 @@ class Exercise2Fragment : Fragment() {
                 )
             }
         }
-
-        val imageBitmap = remember(bitmap) { bitmap!! }
-
-        val tileBitmaps = remember(imageBitmap) {
-            divideBitmap(imageBitmap, gridSize)
+        val tileBitmaps = remember(title) {
+            divideBitmap(bitmap!!, gridSize)
         }
+        val shuffledTiles = remember(tileBitmaps, title) {
+            mutableStateListOf<Bitmap?>()
+//           tileBitmaps.shuffled().toMutableStateList()
+       }.also { shuffledList ->
+           LaunchedEffect(tileBitmaps) {
+               shuffledList.clear()
+               shuffledList.addAll(tileBitmaps.shuffled().toMutableList())
+               seguro = false
 
-        val shuffledTiles = remember(tileBitmaps) {
-           tileBitmaps.dropLast(1).shuffled().toMutableStateList()
-       }
+           }
+        }
 
         // Estado para la posición del espacio en blanco
         val emptyTilePosition = remember { mutableStateOf(Pair(gridSize - 1, gridSize - 1)) }
-
         val coroutineScope = rememberCoroutineScope()
 
         // Función para manejar el movimiento de las fichas
-        val onTileMove =  { startIndex: Int, targetIndex: Int , sshuffledTiles: MutableList<Bitmap?> ->
-            Log.e("funs_startindex", "$startIndex")
-            Log.e("funs_targetindex", "$targetIndex")
+        val onTileMove =  { startIndex: Int, targetIndex: Int  ->
             if (isValidMove(startIndex, targetIndex, gridSize)) {
-                val tempTile = shuffledTiles[startIndex]
-                sshuffledTiles[startIndex] = shuffledTiles[targetIndex]
-                sshuffledTiles[targetIndex] = tempTile
-//                shuffledTiles.swap(startIndex, targetIndex)
-//                Log.e("funs_swap", title)
+                shuffledTiles.swap(startIndex, targetIndex)
                 // Actualizar la posición del espacio en blanco
                 val emptyTileRow = emptyTilePosition.value.first
                 val emptyTileCol = emptyTilePosition.value.second
-//                Log.e("funs_row", "$emptyTileRow")
-//                Log.e("funs_column", "$emptyTileCol")
                 emptyTilePosition.value =
                     if (targetIndex == gridSize * emptyTileRow + emptyTileCol) {
                         Pair(startIndex / gridSize, startIndex % gridSize)
                     } else {
                         Pair(targetIndex / gridSize, targetIndex % gridSize)
                     }
-//                Log.e("funs_valuePair", "${startIndex / gridSize} , ${startIndex % gridSize}")
                 if (isPuzzleSolved(shuffledTiles.toList(), tileBitmaps.dropLast(1))) {
                     coroutineScope.launch {
                         Toast.makeText(context, "¡Rompecabezas resuelto!", Toast.LENGTH_SHORT)
                             .show()
-                        //shuffledTiles.dropLast(1)
-                        //shuffledTiles.add(tileBitmaps.last())
                         puntos++
-//                        Log.e("funs_puntos", "$puntos")
                     }
                 }
             }
@@ -549,13 +542,12 @@ class Exercise2Fragment : Fragment() {
         ) {
             Column(
                 modifier = Modifier
-                   // .fillMaxSize()
                     .padding(vertical = 24.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = title,
+                    text = stringResource(id = title),
                     fontWeight = FontWeight.Bold
                 )
                 Text(
@@ -565,24 +557,19 @@ class Exercise2Fragment : Fragment() {
                         .fillMaxWidth()
                         .padding(bottom = 8.dp)
                 )
-                for (row in 0 until gridSize) {
-                    Row {
-                        for (col in 0 until gridSize) {
-                            val index = row * gridSize + col
-                            PuzzleTile(
-                                bitmap = shuffledTiles[index]?.asImageBitmap(),
-                                tileSize = tileSize,
-                                onMove = {
-                                    val curt =  shuffledTiles.toMutableList()
-                                    val tempTile = curt[index]
-                                    curt[index] = curt[it]
-                                    curt[it] = tempTile
-                                    shuffledTiles.clear()
-                                    shuffledTiles.addAll(curt)
-                                         },
-                                index = index,
-                                emptyTilePosition = emptyTilePosition.value,
-                            )
+                if (!seguro) {
+                    for (row in 0 until gridSize) {
+                        Row {
+                            for (col in 0 until gridSize) {
+                                val index = row * gridSize + col
+                                PuzzleTile(
+                                    bitmap = shuffledTiles[index]?.asImageBitmap(),
+                                    tileSize = tileSize,
+                                    onMove = { shuffledTiles.swap(it, index) },
+                                    index = index,
+                                    emptyTilePosition = emptyTilePosition.value,
+                                )
+                            }
                         }
                     }
                 }
@@ -782,7 +769,7 @@ class Exercise2Fragment : Fragment() {
                 if (i == gridSize - 1 && j == gridSize - 1) {
                     // Última ficha vacía
                     result.add(null)
-                    result.add(Bitmap.createBitmap(bitmap, x, y, tileWidth, tileHeight))
+//                    result.add(Bitmap.createBitmap(bitmap, x, y, tileWidth, tileHeight))
                 } else {
                     result.add(Bitmap.createBitmap(bitmap, x, y, tileWidth, tileHeight))
                 }
@@ -876,29 +863,30 @@ class Exercise2Fragment : Fragment() {
         )
     }
 
-//    @Composable
-//    fun getImageBitMap(cardData: CardData): Bitmap? {
-//        var bitmap by remember(cardData) { mutableStateOf<Bitmap?>(null) }
-//        when (cardData) {
-//            is CardData.Letters -> {
-//                bitmap = BitmapFactory.decodeResource(context?.resources, cardData.data.image)
-//            }
-//            is CardData.VideoGif -> {
-//                AsyncImage(
-//                    model = ImageRequest.Builder(LocalContext.current)
-//                        .data(cardData.data.uri)
-//                        .crossfade(true)
-//                        .build(),
-//                    contentDescription = "Image",
-//                    imageLoader = imageLoader(LocalContext.current),
-//                    onSuccess = { state ->
-//                        bitmap = (state.result.drawable as BitmapDrawable).bitmap
-//                    }
-//                )
-//            }
-//        }
-//        return bitmap
-//    }
+   @Composable
+   fun getBitMap(cardData: CardData): Bitmap? {
+       var bitmap by remember(cardData) { mutableStateOf<Bitmap?>(null) }
+           when (cardData) {
+               is CardData.Letters -> {
+                   bitmap = BitmapFactory.decodeResource(context?.resources, cardData.data.image)
+               }
+               is CardData.VideoGif -> {
+               AsyncImage(
+                   model = ImageRequest.Builder(LocalContext.current)
+                       .data(cardData.data.uri)
+                       .crossfade(true)
+                       .build(),
+                   contentDescription = "Image",
+                   imageLoader = imageLoader(LocalContext.current),
+                   onSuccess = { state ->
+                       bitmap = (state.result.drawable as BitmapDrawable).bitmap
+                   }
+               )
+               }
+           }
+
+       return bitmap
+   }
 
     @Preview(showBackground = true)
     @Composable

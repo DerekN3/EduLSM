@@ -17,10 +17,23 @@ data class VideoGifsCards(
 )
 
 sealed class CardData{
-    data class Letters(val data: LettersCards): CardData()
-    data class VideoGif(val data: VideoGifsCards): CardData()
-}
+    abstract val title: Int
+    abstract val description: Int
+    abstract val answer: String
 
+    data class Letters(val data: LettersCards): CardData() {
+        override val title: Int get() = data.title
+        override val description: Int get() = data.description
+        override val answer: String get() = data.answer
+    }
+
+    data class VideoGif(val data: VideoGifsCards): CardData() {
+        override val title: Int get() = data.title
+        override val description: Int get() = data.description
+        override val answer: String get() = data.answer
+    }
+
+}
 
 data class LevelCard(
     val cards: List<CardData>,
