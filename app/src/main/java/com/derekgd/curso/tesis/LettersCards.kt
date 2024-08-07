@@ -331,7 +331,7 @@ val lettersCardsList = listOf(
     ),
     CardData.VideoGif(
         VideoGifsCards(
-            "",
+            "https://firebasestorage.googleapis.com/v0/b/lsmdatabase-21d9c.appspot.com/o/gifs%2Fn10.gif?alt=media&token=2086a9fd-0c9c-4b9d-839c-124616bee6ac",
             R.string.number_10,
             R.string.description_number_10,
             "10"
@@ -339,7 +339,7 @@ val lettersCardsList = listOf(
     ),
     CardData.VideoGif(
         VideoGifsCards(
-            "",
+            "https://firebasestorage.googleapis.com/v0/b/lsmdatabase-21d9c.appspot.com/o/gifs%2Fblanco.gif?alt=media&token=fb7d1834-3128-41da-aba2-aa74551a2030",
             R.string.color_white,
             R.string.description_color_white,
             "Blanco"
@@ -409,39 +409,49 @@ val levelsList = listOf(
         lettersCardsList.subList(0, 3),
         1
     ), LevelCard(
-        lettersCardsList.subList(4, 7),
+        lettersCardsList.subList(3, 6),
         2
     ), LevelCard(
-        lettersCardsList.subList(8, 11),
+        lettersCardsList.subList(6, 9),
         3
     ), LevelCard(
-        lettersCardsList.subList(12, 15),
+        lettersCardsList.subList(9, 12),
         4
     ), LevelCard(
-        lettersCardsList.subList(16, 19),
+        lettersCardsList.subList(12, 15),
         5
     ), LevelCard(
-        lettersCardsList.subList(20, 23),
+        lettersCardsList.subList(15, 18),
         6
     ), LevelCard(
-        lettersCardsList.subList(24, 27),
+        lettersCardsList.subList(18, 21),
         7
     ), LevelCard(
-        lettersCardsList.subList(28, 31),
+        lettersCardsList.subList(21, 24),
         8
     ), LevelCard(
-        lettersCardsList.subList(32, 35),
+        lettersCardsList.subList(24, 27),
         9
     ), LevelCard(
-        lettersCardsList.subList(36, 39),
+        lettersCardsList.subList(27, 30),
         10
     ), LevelCard(
-        lettersCardsList.subList(40, 43),
+        lettersCardsList.subList(30, 33),
         11
     ), LevelCard(
-        lettersCardsList.subList(44, 45),
+        lettersCardsList.subList(33, 37),
         12
+    ), LevelCard(
+        lettersCardsList.subList(37, 40),
+        13
+    ), LevelCard(
+        lettersCardsList.subList(40, 43),
+        14
+    ), LevelCard(
+        lettersCardsList.subList(43, 45),
+        15
     )
+
 )
 
 val SectionTitle = listOf(

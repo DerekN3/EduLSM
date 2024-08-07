@@ -114,8 +114,6 @@
     <string name="description_color_pink"> Con una mano con la palma hacia arriba realiza movimientos pendulares con la otra estirando los dedos medio e indice simulando embarrar algo.</string>"
 
 
-
-
     <string name="InstructionsSlidingPuzzle"> Resuelve el rompecabezas en el menor tiempo posible! Puedes mover las piezas utilizando el espacio vacio como comodin y distribuyendolo correctamente y tambien intercambiar piezas adyacentes si lo necesitas, buena suerte!    </string>
 
     <!-- Strings used for fragments for navigation -->

@@ -76,8 +76,10 @@ dependencies {
     implementation(libs.volley)
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
     implementation ("com.github.skydoves:landscapist-glide:2.1.5") // Para usar Glide con Coil en Compose
+    implementation ("com.github.bumptech.glide:okhttp3-integration:4.15.1")
     implementation("io.coil-kt:coil-compose:2.2.2")
     implementation("io.coil-kt:coil-gif:2.2.2")
+    implementation("io.coil-kt:coil-video:2.2.2")
 
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)

@@ -1,11 +1,11 @@
 package com.derekgd.curso.tesis
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -38,7 +38,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -48,7 +47,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -75,20 +73,25 @@ import androidx.compose.ui.res.stringResource // Importa stringResource permite 
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import coil.Coil
 import coil.ImageLoader
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
-import coil.compose.rememberAsyncImagePainter
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.gif.GifDrawable
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 
 
@@ -192,11 +195,10 @@ class Exercise2Fragment : Fragment() {
             }
         }
     }
-
-    @SuppressLint("UnrememberedMutableState")
+    
     @Composable
-    fun LetterQuiz(cardData: CardData, radioOptions: List<String>, onOptionSelected: (String) -> Unit) {
-        var selectedIndex by mutableStateOf<Int?>(null)
+    fun LetterQuiz(cardData: CardData, key: Int, radioOptions: List<String>, onOptionSelected: (String) -> Unit) {
+        var selectedIndex by remember(key) { mutableStateOf<Int?>(null) }
         Card(
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -242,18 +244,19 @@ class Exercise2Fragment : Fragment() {
         val shuffledCards by remember(lettersCards) {
             mutableStateOf(lettersCards.shuffled())
         }
-        val titlesNumber = if (levelState < 6) 0 else if (levelState < 9) 1 else 2
+        val titlesNumber = if (levelState < 9) 0 else if (levelState <12) 1 else 2
         val elements = listOf(letters, numbers, colors)
         val section = SectionTitle[titlesNumber]
         val sectionDescription = SectionDescription[titlesNumber]
         val selectedOptions = mutableListOf("", "", "")
         val answers: MutableList<String> = mutableListOf()
-        var YesNoAnswer: String = ""
+        var yesNoAnswer: String = ""
         val intentos = remember { mutableIntStateOf(3) }
         var showImages by remember { mutableStateOf(true) }
         var seguro by remember { mutableStateOf(true) }
         val scrollState = rememberScrollState()
         val coroutineScope = rememberCoroutineScope()
+        var resetOptions by remember { mutableIntStateOf(0)}
 
         Column(modifier = Modifier.verticalScroll(scrollState)) {
             Text(
@@ -295,6 +298,7 @@ class Exercise2Fragment : Fragment() {
                     if (seguro) {
                         showImages = !showImages
                         seguro = false
+                        resetOptions++
 //                        Log.e("seguro", "$seguro")
                         coroutineScope.launch {
                             scrollState.scrollTo(0)
@@ -311,27 +315,20 @@ class Exercise2Fragment : Fragment() {
             val shuffleLettersList by remember {
                 derivedStateOf {
                     shuffledCards.map { cardData ->
-                        val answer = when (cardData) {
-                            is CardData.Letters -> cardData.data.answer
-                            is CardData.VideoGif -> cardData.data.answer
-                        }
                         val shuffleLetters =
                             elements[titlesNumber].shuffled().take(2).toMutableList()
-                        shuffleLetters.add(answer)
+                        shuffleLetters.add(cardData.answer)
                         shuffleLetters.shuffled()
                     }
                 }
             }
 
             shuffledCards.forEachIndexed { index, lettersCards ->
-                val lettersCardsAnswer = when (lettersCards) {
-                    is CardData.Letters -> lettersCards.data.answer
-                    is CardData.VideoGif -> lettersCards.data.answer
-                }
-                answers.add(lettersCardsAnswer)
+                answers.add(lettersCards.answer)
                 LetterQuiz(
-                    lettersCards,
-                    shuffleLettersList[index],
+                    cardData = lettersCards,
+                    key = resetOptions,
+                    radioOptions = shuffleLettersList[index],
                     onOptionSelected = { selectedAnswer ->
                         selectedOptions[index] =
                             selectedAnswer // Guardar la selección del usuario
@@ -344,24 +341,9 @@ class Exercise2Fragment : Fragment() {
 
 
             val currentCard: CardData by remember { derivedStateOf { shuffledCards.first() } }
-            val title = remember(currentCard) {
-                when (val card = currentCard) {
-                    is CardData.Letters -> card.data.title
-                    is CardData.VideoGif -> card.data.title
-                }
-            }
-            val description = remember(currentCard) {
-                when (val card = currentCard) {
-                    is CardData.Letters -> card.data.description
-                    is CardData.VideoGif -> card.data.description
-                }
-            }
-            val randomDescription = remember(lettersCards) {
-                when (val letters = lettersCards.random()) {
-                    is CardData.Letters -> letters.data.description
-                    is CardData.VideoGif -> letters.data.description
-                }
-            }
+            val title = remember(currentCard) { currentCard.title }
+            val description = remember(currentCard) { currentCard.description }
+            val randomDescription = remember(lettersCards) { lettersCards.random().description }
             val randomDecision by remember {
                 derivedStateOf {
                     listOf(
@@ -373,8 +355,9 @@ class Exercise2Fragment : Fragment() {
             QuestionYesNo(
                 stringResource(id = title),
                 stringResource(id = randomDecision),
+                key = resetOptions,
                 onOptionSelected = { selectedAnswer ->
-                    YesNoAnswer = selectedAnswer
+                    yesNoAnswer = selectedAnswer
                 }
             )
             //shuffleLetterCards = lettersCards.shuffled()
@@ -390,7 +373,6 @@ class Exercise2Fragment : Fragment() {
 
 
                         if (intentos.intValue > 0) {
-
                             puntos += answers.zip(selectedOptions) { answer, selectedOption ->
                                 if (answer == selectedOption) {
                                     1
@@ -398,14 +380,16 @@ class Exercise2Fragment : Fragment() {
                                     0
                                 }
                             }.sum()
-                            if (description == randomDecision && YesNoAnswer == "Si") {
+                            if (description == randomDecision && yesNoAnswer == "Si") {
                                 puntos++
-                            } else if (description != randomDecision && YesNoAnswer == "No") {
+                            } else if (description != randomDecision && yesNoAnswer == "No") {
                                 puntos++
                             }
                             Log.e("seguro_puntos", "$puntos")
+
                             if (puntos >= 3) {
-                                if (level < 6) {
+
+                                if (level < 10) {
                                     puntos = 0
                                     level++
                                     levelState = level
@@ -467,6 +451,7 @@ class Exercise2Fragment : Fragment() {
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Composable
     fun SlidingPuzzle(
         title: Int,
@@ -482,19 +467,32 @@ class Exercise2Fragment : Fragment() {
                 bitmap = BitmapFactory.decodeResource(context.resources, cardData.data.image)
             }
             is CardData.VideoGif -> {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(cardData.data.uri)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = "Image",
-                    imageLoader = imageLoader(LocalContext.current),
-                    onSuccess = { state ->
-                        bitmap = (state.result.drawable as BitmapDrawable).bitmap
-                    }
-                )
+//                AsyncImage(
+//                    model = ImageRequest.Builder(LocalContext.current)
+//                        .data(cardData.data.uri)
+//                        .crossfade(true)
+//                        .build(),
+//                    contentDescription = "Image",
+//                    imageLoader = imageLoader(LocalContext.current),
+//                    onSuccess = { state ->
+//                        bitmap = (state.result.drawable as BitmapDrawable).bitmap
+//                    }
+//                )
+
+                Glide.with(context)
+                    .asGif()
+                    .load("https://firebasestorage.googleapis.com/v0/b/lsmdatabase-21d9c.appspot.com/o/gifs%2Fn9.gif?alt=media&token=716c374a-cabb-47d1-ab72-ee6feb5c8978")
+                    .into(object : SimpleTarget<GifDrawable>() {
+                        override fun onResourceReady(
+                            resource: GifDrawable,
+                            transition: Transition<in GifDrawable>?
+                        ) {
+                            val gifBitmap = resource.firstFrame
+                        }
+                    })
             }
         }
+
         val tileBitmaps = remember(title) {
             divideBitmap(bitmap!!, gridSize)
         }
@@ -678,11 +676,10 @@ class Exercise2Fragment : Fragment() {
 
     }
 
-    @SuppressLint("UnrememberedMutableState")
     @Composable
-    fun QuestionYesNo(title: String, description: String, onOptionSelected: (String) -> Unit) {
+    fun QuestionYesNo(title: String, description: String, key: Int, onOptionSelected: (String) -> Unit) {
         val radioOptions = listOf("Si", "No")
-        var optionSelected by mutableStateOf<String?>(null)
+        var optionSelected by remember(key) {mutableStateOf<String?>(null)}
 
         Card(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -722,12 +719,7 @@ class Exercise2Fragment : Fragment() {
         }
     }
 
-    private fun calculateTargetIndex(
-        startIndex: Int,
-        offsetX: Float,
-        offsetY: Float,
-        tileSize: Float
-    ): Int {
+    private fun calculateTargetIndex(startIndex: Int, offsetX: Float, offsetY: Float, tileSize: Float): Int {
         val row = startIndex / 3
         val col = startIndex % 3
 //        val adjustedOffsetX = offsetX + tileSize / 2
@@ -755,7 +747,6 @@ class Exercise2Fragment : Fragment() {
         Log.e("funs_newCol", "$newCol")
         return newRow * 3 + newCol
     }
-
 
     // Función para dividir un Bitmap en partes iguales
     private fun divideBitmap(bitmap: Bitmap, gridSize: Int): List<Bitmap?> {
@@ -862,31 +853,6 @@ class Exercise2Fragment : Fragment() {
                 .size(150.dp)
         )
     }
-
-   @Composable
-   fun getBitMap(cardData: CardData): Bitmap? {
-       var bitmap by remember(cardData) { mutableStateOf<Bitmap?>(null) }
-           when (cardData) {
-               is CardData.Letters -> {
-                   bitmap = BitmapFactory.decodeResource(context?.resources, cardData.data.image)
-               }
-               is CardData.VideoGif -> {
-               AsyncImage(
-                   model = ImageRequest.Builder(LocalContext.current)
-                       .data(cardData.data.uri)
-                       .crossfade(true)
-                       .build(),
-                   contentDescription = "Image",
-                   imageLoader = imageLoader(LocalContext.current),
-                   onSuccess = { state ->
-                       bitmap = (state.result.drawable as BitmapDrawable).bitmap
-                   }
-               )
-               }
-           }
-
-       return bitmap
-   }
 
     @Preview(showBackground = true)
     @Composable
