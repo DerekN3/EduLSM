@@ -44,6 +44,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -86,6 +87,7 @@ import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import com.derekgd.curso.R
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
@@ -385,11 +387,11 @@ class Exercise2Fragment : Fragment() {
                             } else if (description != randomDecision && yesNoAnswer == "No") {
                                 puntos++
                             }
-                            Log.e("seguro_puntos", "$puntos")
+                            Log.e("seguro_puntos", "$puntos, ${lettersCards.size+2}")
 
-                            if (puntos >= 3) {
+                            if (puntos >= lettersCards.size+2) {
 
-                                if (level < 10) {
+                                if (level < 14) {
                                     puntos = 0
                                     level++
                                     levelState = level
@@ -461,44 +463,28 @@ class Exercise2Fragment : Fragment() {
         tileSize: Dp = 100.dp,
     ) {
         var seguro by remember(title) { mutableStateOf(true) }
-        var bitmap by remember(title) { mutableStateOf<Bitmap?>(null) }
-        when (cardData) {
-            is CardData.Letters -> {
-                bitmap = BitmapFactory.decodeResource(context.resources, cardData.data.image)
-            }
-            is CardData.VideoGif -> {
-//                AsyncImage(
-//                    model = ImageRequest.Builder(LocalContext.current)
-//                        .data(cardData.data.uri)
-//                        .crossfade(true)
-//                        .build(),
-//                    contentDescription = "Image",
-//                    imageLoader = imageLoader(LocalContext.current),
-//                    onSuccess = { state ->
-//                        bitmap = (state.result.drawable as BitmapDrawable).bitmap
-//                    }
-//                )
-
-                Glide.with(context)
-                    .asGif()
-                    .load("https://firebasestorage.googleapis.com/v0/b/lsmdatabase-21d9c.appspot.com/o/gifs%2Fn9.gif?alt=media&token=716c374a-cabb-47d1-ab72-ee6feb5c8978")
-                    .into(object : SimpleTarget<GifDrawable>() {
-                        override fun onResourceReady(
-                            resource: GifDrawable,
-                            transition: Transition<in GifDrawable>?
-                        ) {
-                            val gifBitmap = resource.firstFrame
-                        }
-                    })
-            }
+        var firstTry by remember { mutableStateOf(true) }
+        val bitmap by remember(title) {
+            mutableStateOf(
+                BitmapFactory.decodeResource(context.resources, cardData.image)
+            )
         }
+//                    try {
+//                        val gifDrawable = Glide.with(context)
+//                            .asGif()
+//                            .load("https://firebasestorage.googleapis.com/v0/b/lsmdatabase-21d9c.appspot.com/o/gifs%2Fn9.gif?alt=media&token=716c374a-cabb-47d1-ab72-ee6feb5c8978")
+//                            .submit()
+//                            .get()
+//                        Log.e("ErrorGif", "bitmap: ${gifDrawable.firstFrame}")
+//                    } catch (e: Exception) {
+//                        Log.e("ErrorGif", "Error al cargar GIF", e)
+//                    }
 
-        val tileBitmaps = remember(title) {
+        val tileBitmaps = remember(bitmap) {
             divideBitmap(bitmap!!, gridSize)
         }
-        val shuffledTiles = remember(tileBitmaps, title) {
+        val shuffledTiles = remember(tileBitmaps) {
             mutableStateListOf<Bitmap?>()
-//           tileBitmaps.shuffled().toMutableStateList()
        }.also { shuffledList ->
            LaunchedEffect(tileBitmaps) {
                shuffledList.clear()
@@ -513,7 +499,7 @@ class Exercise2Fragment : Fragment() {
         val coroutineScope = rememberCoroutineScope()
 
         // Función para manejar el movimiento de las fichas
-        val onTileMove =  { startIndex: Int, targetIndex: Int  ->
+        fun onTileMove(startIndex: Int, targetIndex: Int){
             if (isValidMove(startIndex, targetIndex, gridSize)) {
                 shuffledTiles.swap(startIndex, targetIndex)
                 // Actualizar la posición del espacio en blanco
@@ -525,11 +511,12 @@ class Exercise2Fragment : Fragment() {
                     } else {
                         Pair(targetIndex / gridSize, targetIndex % gridSize)
                     }
-                if (isPuzzleSolved(shuffledTiles.toList(), tileBitmaps.dropLast(1))) {
+                if (isPuzzleSolved(shuffledTiles.toList(), tileBitmaps) && firstTry) {
                     coroutineScope.launch {
                         Toast.makeText(context, "¡Rompecabezas resuelto!", Toast.LENGTH_SHORT)
                             .show()
                         puntos++
+                        firstTry = false
                     }
                 }
             }
@@ -549,10 +536,11 @@ class Exercise2Fragment : Fragment() {
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "Instrucciones: Mueve las fichas para resolver el rompecabezas",
+                    text = stringResource(id = R.string.InstructionsSlidingPuzzle),
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
                         .padding(bottom = 8.dp)
                 )
                 if (!seguro) {
@@ -563,7 +551,7 @@ class Exercise2Fragment : Fragment() {
                                 PuzzleTile(
                                     bitmap = shuffledTiles[index]?.asImageBitmap(),
                                     tileSize = tileSize,
-                                    onMove = { shuffledTiles.swap(it, index) },
+                                    onMove = { onTileMove(it, index) },
                                     index = index,
                                     emptyTilePosition = emptyTilePosition.value,
                                 )
@@ -691,7 +679,7 @@ class Exercise2Fragment : Fragment() {
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Esta descripcion corresponde a la $title?",
+                    text = "Esta descripcion corresponde a $title?",
                     modifier = Modifier.padding(bottom = 8.dp),
                     fontWeight = FontWeight.Bold
                 )

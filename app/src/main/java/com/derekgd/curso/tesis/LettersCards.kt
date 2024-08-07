@@ -11,6 +11,7 @@ data class LettersCards(
 
 data class VideoGifsCards(
     val uri: String,
+    val image: Int,
     val title: Int,
     val description: Int,
     val answer: String
@@ -20,17 +21,20 @@ sealed class CardData{
     abstract val title: Int
     abstract val description: Int
     abstract val answer: String
+    abstract val image: Int
 
     data class Letters(val data: LettersCards): CardData() {
         override val title: Int get() = data.title
         override val description: Int get() = data.description
         override val answer: String get() = data.answer
+        override val image: Int get() = data.image
     }
 
     data class VideoGif(val data: VideoGifsCards): CardData() {
         override val title: Int get() = data.title
         override val description: Int get() = data.description
         override val answer: String get() = data.answer
+        override val image: Int get() = data.image
     }
 
 }
@@ -324,6 +328,7 @@ val lettersCardsList = listOf(
     CardData.VideoGif(
         VideoGifsCards(
             "https://firebasestorage.googleapis.com/v0/b/lsmdatabase-21d9c.appspot.com/o/gifs%2Fn9.gif?alt=media&token=716c374a-cabb-47d1-ab72-ee6feb5c8978",
+            R.drawable.n9,
             R.string.number_9,
             R.string.description_number_9,
             "9"
@@ -332,6 +337,7 @@ val lettersCardsList = listOf(
     CardData.VideoGif(
         VideoGifsCards(
             "https://firebasestorage.googleapis.com/v0/b/lsmdatabase-21d9c.appspot.com/o/gifs%2Fn10.gif?alt=media&token=2086a9fd-0c9c-4b9d-839c-124616bee6ac",
+            R.drawable.n10,
             R.string.number_10,
             R.string.description_number_10,
             "10"
@@ -340,6 +346,7 @@ val lettersCardsList = listOf(
     CardData.VideoGif(
         VideoGifsCards(
             "https://firebasestorage.googleapis.com/v0/b/lsmdatabase-21d9c.appspot.com/o/gifs%2Fblanco.gif?alt=media&token=fb7d1834-3128-41da-aba2-aa74551a2030",
+            R.drawable.blanco,
             R.string.color_white,
             R.string.description_color_white,
             "Blanco"
@@ -347,7 +354,8 @@ val lettersCardsList = listOf(
     ),
     CardData.VideoGif(
         VideoGifsCards(
-            "",
+            "https://firebasestorage.googleapis.com/v0/b/lsmdatabase-21d9c.appspot.com/o/gifs%2Fnegro.gif?alt=media&token=68b973dd-0d64-4675-9db3-aec672c864a8",
+            R.drawable.negro,
             R.string.color_black,
             R.string.description_color_black,
             "Negro"
@@ -355,7 +363,8 @@ val lettersCardsList = listOf(
     ),
     CardData.VideoGif(
         VideoGifsCards(
-            "",
+            "https://firebasestorage.googleapis.com/v0/b/lsmdatabase-21d9c.appspot.com/o/gifs%2Fazul.gif?alt=media&token=f5b2aa61-9693-4bf0-a62e-b624420e4f01",
+            R.drawable.azul,
             R.string.color_blue,
             R.string.description_color_blue,
             "Azul"
@@ -363,7 +372,8 @@ val lettersCardsList = listOf(
     ),
     CardData.VideoGif(
         VideoGifsCards(
-            "",
+            "https://firebasestorage.googleapis.com/v0/b/lsmdatabase-21d9c.appspot.com/o/gifs%2Famarillo.gif?alt=media&token=29577334-aec6-4c3f-afc1-ff0c6715d6d8",
+            R.drawable.amarillo,
             R.string.color_yellow,
             R.string.description_color_yellow,
             "Amarillo"
@@ -371,7 +381,8 @@ val lettersCardsList = listOf(
     ),
     CardData.VideoGif(
         VideoGifsCards(
-            "",
+            "https://firebasestorage.googleapis.com/v0/b/lsmdatabase-21d9c.appspot.com/o/gifs%2Fgris.gif?alt=media&token=f21dd306-795c-4322-a50d-3e597e73f3b1",
+            R.drawable.gris,
             R.string.color_gray,
             R.string.description_color_gray,
             "Gris"
@@ -379,7 +390,8 @@ val lettersCardsList = listOf(
     ),
     CardData.VideoGif(
         VideoGifsCards(
-            "",
+            "https://firebasestorage.googleapis.com/v0/b/lsmdatabase-21d9c.appspot.com/o/gifs%2Fmorado.gif?alt=media&token=feabfbdc-a0a7-4881-a1aa-0d8e1a3ac7b9",
+            R.drawable.morado,
             R.string.color_purple,
             R.string.description_color_purple,
             "Morado"
@@ -387,7 +399,8 @@ val lettersCardsList = listOf(
     ),
     CardData.VideoGif(
         VideoGifsCards(
-            "",
+            "https://firebasestorage.googleapis.com/v0/b/lsmdatabase-21d9c.appspot.com/o/gifs%2Fverde.gif?alt=media&token=56d22766-1286-49bc-a488-c3082b6b5730",
+            R.drawable.verde,
             R.string.color_green,
             R.string.description_color_green,
             "Verde"
@@ -395,7 +408,8 @@ val lettersCardsList = listOf(
     ),
     CardData.VideoGif(
         VideoGifsCards(
-            "",
+            "https://firebasestorage.googleapis.com/v0/b/lsmdatabase-21d9c.appspot.com/o/gifs%2Frosa.gif?alt=media&token=c7ac8dd6-8563-4a90-9874-27563f69bed5",
+            R.drawable.rosa,
             R.string.color_pink,
             R.string.description_color_pink,
             "Rosa"
