@@ -286,6 +286,7 @@ class Exercise2Fragment : Fragment() {
         val intentos = remember { mutableIntStateOf(3) }
         var showImages by remember { mutableStateOf(true) }
         var seguro by remember { mutableStateOf(true) }
+        var reset by remember { mutableStateOf(false) }
         val scrollState = rememberScrollState()
         val coroutineScope = rememberCoroutineScope()
         var resetOptions by remember { mutableIntStateOf(0)}
@@ -369,7 +370,7 @@ class Exercise2Fragment : Fragment() {
 
 
             val letRandom: CardData by remember { derivedStateOf {lettersCards.random()} }
-            SlidingPuzzle(letRandom.title,letRandom)
+            SlidingPuzzle(letRandom.title,letRandom,recalculate = reset)
 
 
             val currentCard: CardData by remember { derivedStateOf { shuffledCards.first() } }
@@ -428,6 +429,7 @@ class Exercise2Fragment : Fragment() {
                                     levelRef.setValue(level)
                                     showImages = true
                                     seguro = true
+                                    reset = false
                                     lettersCards.clear()
                                     levelsList[levelState].cards.forEach {
                                         lettersCards.add(it)
@@ -450,6 +452,8 @@ class Exercise2Fragment : Fragment() {
                                     Toast.LENGTH_SHORT
                                 ).show()
                                 intentos.intValue--
+                                puntos = 0
+                                reset = true
                             }
 
                         } else {
@@ -491,6 +495,7 @@ class Exercise2Fragment : Fragment() {
         context: Context = LocalContext.current,
         gridSize: Int = 3, // 3x3 grid
         tileSize: Dp = 100.dp,
+        recalculate: Boolean = false
     ) {
         var seguro by remember(title) { mutableStateOf(true) }
         var firstTry by remember { mutableStateOf(true) }
@@ -541,7 +546,7 @@ class Exercise2Fragment : Fragment() {
                     } else {
                         Pair(targetIndex / gridSize, targetIndex % gridSize)
                     }
-                if (isPuzzleSolved(shuffledTiles.toList(), tileBitmaps) && firstTry) {
+                if (isPuzzleSolved(shuffledTiles.toList(), tileBitmaps) && firstTry || isPuzzleSolved(shuffledTiles.toList(), tileBitmaps) && puntos == 0 ) {
                     coroutineScope.launch {
                         Toast.makeText(context, "¡Rompecabezas resuelto!", Toast.LENGTH_SHORT)
                             .show()
@@ -550,6 +555,10 @@ class Exercise2Fragment : Fragment() {
                     }
                 }
             }
+        }
+        if (recalculate && puntos == 0) {
+            onTileMove(0,1)
+            onTileMove(1, 0)
         }
         Card(
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
