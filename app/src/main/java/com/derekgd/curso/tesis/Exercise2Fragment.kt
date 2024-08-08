@@ -273,16 +273,16 @@ class Exercise2Fragment : Fragment() {
         val lettersCards = remember {
             mutableStateListOf(*levelsList[levelState].cards.toTypedArray())
         }
-        val shuffledCards by remember(lettersCards) {
+        var shuffledCards by remember(lettersCards) {
             mutableStateOf(lettersCards.shuffled())
         }
         val titlesNumber = if (levelState < 9) 0 else if (levelState <12) 1 else 2
         val elements = listOf(letters, numbers, colors)
         val section = SectionTitle[titlesNumber]
         val sectionDescription = SectionDescription[titlesNumber]
-        val selectedOptions = mutableListOf("", "", "")
+        val selectedOptions = remember(shuffledCards) { mutableListOf("", "", "") }
         val answers: MutableList<String> = mutableListOf()
-        var yesNoAnswer: String = ""
+        var yesNoAnswer by remember(shuffledCards) {mutableStateOf("")}
         val intentos = remember { mutableIntStateOf(3) }
         var showImages by remember { mutableStateOf(true) }
         var seguro by remember { mutableStateOf(true) }
@@ -430,11 +430,12 @@ class Exercise2Fragment : Fragment() {
                                     showImages = true
                                     seguro = true
                                     reset = false
+                                    resetOptions++
                                     lettersCards.clear()
                                     levelsList[levelState].cards.forEach {
                                         lettersCards.add(it)
                                     }
-//                                    letRandom = lettersCards.random()
+                                    shuffledCards = lettersCards.shuffled()
                                     coroutineScope.launch {
                                         scrollState.scrollTo(0)
                                     }
