@@ -2,6 +2,7 @@ package com.derekgd.curso.tesis
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
@@ -18,10 +19,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -53,7 +57,9 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -68,7 +74,10 @@ import com.google.firebase.database.Transaction
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import androidx.compose.ui.res.stringResource // Importa stringResource permite usar las direcciones de los strings  en values/strings
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
@@ -154,32 +163,65 @@ class Exercise2Fragment : Fragment() {
 
     @Composable
     fun LetterIntroduction(cardData: CardData) {
+        val textMeasurer = rememberTextMeasurer()
         Card(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             shape = RoundedCornerShape(16.dp)
         ) {
-            Row {
-                when (cardData) {
-                    is CardData.Letters -> {
-                        CubeImage(cardData.data.image)
-                        cardData.data.title to cardData.data.description
+            val configuration = LocalConfiguration.current
+            val screenWidth = configuration.screenWidthDp.dp
+            val description = stringResource(id = cardData.description)
+            val textLayaoutResult = textMeasurer.measure(
+                text = AnnotatedString(description),
+                constraints = Constraints(maxWidth = screenWidth.value.toInt()-150)
+            )
+            val isLongText = textLayaoutResult.size.height > (150.dp.value * LocalDensity.current.density)
+
+            if (isLongText){
+                Column(horizontalAlignment = Alignment.CenterHorizontally){
+                    Spacer(modifier = Modifier.height(16.dp))
+                    when (cardData) {
+                        is CardData.Letters -> {
+                            CubeImage(cardData.data.image)
+                        }
+                        is CardData.VideoGif -> {
+                            CubeGif(cardData.data.uri)
+                        }
                     }
-                    is CardData.VideoGif -> {
-                        CubeGif(cardData.data.uri)
-                        cardData.data.title to cardData.data.description
-                    }
-                }.let { (title, description) ->
                     Column(
-                        modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = stringResource(id = title),
+                            text = stringResource(id = cardData.title),
                             modifier = Modifier.padding(bottom = 8.dp),
                             fontWeight = FontWeight.Bold
                         )
-                        Text(text = stringResource(id = description))
+                        Text(text = description,modifier = Modifier.padding(horizontal = 16.dp))
+                    }
+                }
+            }else{
+                Row {
+                    when (cardData) {
+                        is CardData.Letters -> {
+                            CubeImage(cardData.data.image,modifier = Modifier.padding(16.dp))
+                        }
+                        is CardData.VideoGif -> {
+                            CubeGif(cardData.data.uri, modifier = Modifier.padding(16.dp))
+                        }
+                    }
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 24.dp, vertical = 8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = stringResource(id = cardData.title),
+                            modifier = Modifier.padding(bottom = 8.dp),
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(text = description)
                     }
                 }
             }
@@ -194,10 +236,10 @@ class Exercise2Fragment : Fragment() {
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .fillMaxWidth(), shape = RoundedCornerShape(16.dp)
         ) {
-            Row {
+            Row (verticalAlignment = Alignment.CenterVertically){
                 when (cardData) {
-                    is CardData.Letters -> CubeImage(cardData.data.image)
-                    is CardData.VideoGif -> CubeGif(cardData.data.uri)
+                    is CardData.Letters -> CubeImage(cardData.data.image,modifier = Modifier.padding(16.dp))
+                    is CardData.VideoGif -> CubeGif(cardData.data.uri,modifier = Modifier.padding(16.dp))
                 }
                 Column(
                     Modifier
@@ -805,10 +847,9 @@ class Exercise2Fragment : Fragment() {
     }
 
     @Composable
-    fun CubeImage(image: Int) {
+    fun CubeImage(image: Int,modifier: Modifier = Modifier) {
         Image(
-            modifier = Modifier
-                .padding(16.dp)
+            modifier = modifier
                 .size(150.dp),
             painter = painterResource(id = image),
             contentDescription = "A sign in LSM"
@@ -816,11 +857,10 @@ class Exercise2Fragment : Fragment() {
     }
 
     @Composable
-    fun CubeGif(uri: String){
+    fun CubeGif(uri: String ,modifier: Modifier = Modifier){
         var isLoading by remember { mutableStateOf(true) }
         Box (
-            modifier = Modifier
-                .padding(16.dp)
+            modifier = modifier
                 .size(150.dp)
         ) {
             AsyncImage(
