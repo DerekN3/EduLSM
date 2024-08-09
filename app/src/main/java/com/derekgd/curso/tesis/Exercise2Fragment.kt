@@ -237,9 +237,13 @@ class Exercise2Fragment : Fragment() {
                 .fillMaxWidth(), shape = RoundedCornerShape(16.dp)
         ) {
             Row (verticalAlignment = Alignment.CenterVertically){
-                when (cardData) {
-                    is CardData.Letters -> CubeImage(cardData.data.image,modifier = Modifier.padding(16.dp))
-                    is CardData.VideoGif -> CubeGif(cardData.data.uri,modifier = Modifier.padding(16.dp))
+                if (level < 12) {
+                    when (cardData) {
+                        is CardData.Letters -> CubeImage(cardData.data.image,modifier = Modifier.padding(16.dp))
+                        is CardData.VideoGif -> CubeGif(cardData.data.uri,modifier = Modifier.padding(16.dp))
+                    }
+                }else{
+                    CubeImage(cardData.image,modifier = Modifier.padding(16.dp))
                 }
                 Column(
                     Modifier
@@ -314,7 +318,7 @@ class Exercise2Fragment : Fragment() {
                     .padding(top = 8.dp)
             ) {
                 Text("Nivel", modifier = Modifier.padding(8.dp), fontSize = 16.sp)
-                val value = levelState.toFloat() / levelsList.size
+                val value = levelState.toFloat() / (levelsList.size - 1)
                 LinearProgressIndicator(
                     progress = { value },
                     modifier = Modifier.weight(1f)
